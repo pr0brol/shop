@@ -10,11 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springmarket.shop.entities.Category;
 import springmarket.shop.entities.Product;
+import springmarket.shop.entities.User;
 import springmarket.shop.services.CategoryService;
 import springmarket.shop.services.ProductService;
+import springmarket.shop.services.UserService;
 import springmarket.shop.utils.Cart;
 import springmarket.shop.utils.ProductFilter;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +25,30 @@ import java.util.Map;
 public class MainController {
     private ProductService productService;
     private CategoryService categoryService;
+    private UserService userService;
     private Cart cart;
 
     @Autowired
-    public MainController(ProductService productService, CategoryService categoryService, Cart cart) {
+    public MainController(ProductService productService, CategoryService categoryService, UserService userService, Cart cart) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.userService = userService;
         this.cart = cart;
+    }
+
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login_page";
+    }
+
+    @GetMapping("/profile")
+    public String profilePage(Model model, Principal principal){
+        if(principal == null){
+            return "redirect:/";
+        }
+        User user = userService.findByPhone(principal.getName());
+        model.addAttribute("user", user);
+        return "profile";
     }
 
     @GetMapping("/")
@@ -59,7 +79,7 @@ public class MainController {
         List<Category> categories = categoryService.getAll();
         model.addAttribute("product", product);
         model.addAttribute("categories", categories);
-        return "edit_item";
+        return "edit_product";
     }
 
     @PostMapping("/edit")
@@ -71,7 +91,15 @@ public class MainController {
     @GetMapping("/cart")
     public String cartForm(Model model) {
         Map<Product, Integer> products = cart.allProductsInCart();
+        int count = 0;
+        int sum = 0;
+        for (Map.Entry<Product, Integer> prod: products.entrySet()) {
+            sum += prod.getKey().getPrice() * prod.getValue();
+            count += prod.getValue();
+        }
         model.addAttribute("products", products);
+        model.addAttribute("sum", sum);
+        model.addAttribute("count", count);
         return "cart";
     }
 }
