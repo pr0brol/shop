@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Корзина</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div th:replace="~{navigation :: navigation(Cart)}"/>
+    <br>
+    <h1 th:text="#{order.your} + ${order_id} + #{order.formed}"/>
+    <p th:text="#{order.thank}"></p>
+    <form th:action="@{/}" method="POST">
+        <h4 th:text="#{order.feedback.evaluation}"/>
+        <h6 th:text="#{order.feedback}"/>
+        <input name="feedback" type="field" th:placeholder="#{order.feedback}">
+        <br>
+        <h6 th:text="#{order.evaluation}"/>
+        <select name="evaluation">
+            <option th:text="#{order.not}" th:value="'0'"/>
+            <option th:text="'1'" th:value="'1'"/>
+            <option th:text="'2'" th:value="'2'"/>
+            <option th:text="'3'" th:value="'3'"/>
+            <option th:text="'4'" th:value="'4'"/>
+            <option th:text="'5'" th:value="'5'"/>
+        </select>
+        <br>
+        <button type="submit" class="btn btn-success" th:text="#{order.review}"></button>
+    </form>
+
+    <a th:href="@{/}" th:text="#{order.return}"></a>
+
+</div>
+
+</body>
+</html>

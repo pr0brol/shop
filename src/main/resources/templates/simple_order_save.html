@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Корзина</title>
+    <title th:text="#{order}"></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -15,26 +15,17 @@
 <div class="container">
     <div th:replace="~{navigation :: navigation(Cart)}"/>
     <br>
-    <h3>Подтверждение заказа</h3>
-    <h4>Укажите информацию для доставки</h4>
-    <div class="col form-group">
-        <label>Адрес</label>
-        <input type="text" class="form-control" name="address" placeholder="Адрес доставки">
-    </div>
-    <div class="col form-group">
-        <label>Имя пользователя</label>
-        <input type="text" class="form-control" name="username" th:placeholder="${user.phone}">
-    </div>
-    <h5>В заказе наименований товаров: <span th:text="${cart.items.size()}"></span></h5>
+    <h3 th:text="#{order.confirm}"/>
+
+    <h5 th:text="#{order.count} + ${cart.items.size()}"/>
     <!--<h5>В корзине товаров: <span th:text = "${count}"></span></h5>-->
     <table class="table table-hover">
         <thead class="thead-dark">
         <tr>
-            <th>Товар</th>
-            <th>Цена товара</th>
-            <th>Количество</th>
-            <th>Цена позиции</th>
-            <th>Действие</th>
+            <th th:text="#{order.product}"/>
+            <th th:text="#{order.product.price}"/>
+            <th th:text="#{order.quantity}"/>
+            <th th:text="#{order.products.price}"/>
         </tr>
         </thead>
         <tbody>
@@ -45,18 +36,17 @@
             <td th:text="${item.product.price}"/>
             <td th:text="${item.quantity}"/>
             <td th:text="${item.price}"/>
-            <td>
-                <a th:href="@{'/orders/control/delete/' + ${item.product.id}}" class="btn btn-warning">Delete</a>
-            </td>
-
         </tr>
         </tbody>
     </table>
-    <h5>В корзине товаров на сумму: <span th:text="${cart.price}"></span></h5>
+    <h5 th:text="#{order.sum.price} + ${cart.price}"/>
     <br>
-    <div th:if="${cart.items.size() > 0}">
-        <a class="btn btn-primary" th:href="@{/orders/create}">Оформить заказ</a>
-    </div>
+    <h4 th:text="#{order.info}"/>
+    <form th:action="@{/simple/create}" method="POST">
+        <input name="address" type="text" class="form-control" th:placeholder="#{order.address}">
+        <input name="phone_number" type="text" class="form-control" th:placeholder="#{order.phone}">
+        <button class="btn btn-primary" type="submit" th:text="#{order.checkout}"></button>
+    </form>
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <!--<li class="page-item" th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}">-->

@@ -1,0 +1,60 @@
+package springmarket.shop.entities;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@Data
+@Table(name = "products")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "title")
+    private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+//    @OneToMany(mappedBy = "prod_id")
+//    private List<Feedback> feedbacks;
+
+    @OneToMany()
+    @JoinTable(name = "feedbacks",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "prod_id"))
+    private List<Feedback> feedbacks;
+
+    @Override
+    public int hashCode() {
+        String str = this.getId().toString();
+        return Integer.parseInt(str);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if((!(object instanceof Product)) || (object == null)){
+            return false;
+        }
+        Product tempProduct = (Product) object;
+        if(this.getId() == tempProduct.getId()){
+            return true;
+        }
+        return false;
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="#{order}"></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div th:replace="~{navigation :: navigation(Cart)}"/>
+    <br>
+    <h3 th:text="#{order.confirm}"/>
+
+    <h5 th:text="#{order.count} + ${cart.items.size()}"/>
+    <!--<h5>В корзине товаров: <span th:text = "${count}"></span></h5>-->
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th th:text="#{order.product}"/>
+            <th th:text="#{order.product.price}"/>
+            <th th:text="#{order.quantity}"/>
+            <th th:text="#{order.products.price}"/>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.geekbrains.marketdemoa.entites.Item>"*/-->
+        <!--/*@thymesVar id="item" type="com.geekbrains.marketdemoa.entites.Item"*/-->
+        <tr th:each="item : ${cart.items}">
+            <td th:text="${item.product.title}"/>
+            <td th:text="${item.product.price}"/>
+            <td th:text="${item.quantity}"/>
+            <td th:text="${item.price}"/>
+        </tr>
+        </tbody>
+    </table>
+    <h5 th:text="#{order.sum.price} + ${cart.price}"/>
+    <br>
+    <h4 th:text="#{order.info}"/>
+    <form th:action="@{/orders/create}" method="POST">
+        <input name="address" type="text" class="form-control" th:placeholder="#{order.address}">
+        <input name="phone_number" th:value="${user.phone}" type="text" class="form-control" th:placeholder="#{order.phone}">
+        <button class="btn btn-primary" type="submit" th:text="#{order.checkout}"></button>
+    </form>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!--<li class="page-item" th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}">-->
+            <!--<a th:class="page-link" th:href="@{'/products?p=' + ${page.getNumber()} + ${filters}}"-->
+            <!--th:text="#{paging.prev}"></a>-->
+            <!--</li>-->
+
+            <!--<li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"-->
+            <!--th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">-->
+            <!--<a th:class="page-link" th:text="${i}" th:href="@{'/?p=' + ${i} + ${filtersDef}}"></a>-->
+            <!--</li>-->
+
+            <!--<li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}">-->
+            <!--<a th:class="page-link" th:href="@{'/products?pageNumber=' + ${page.getNumber() + 2} + ${filters}}"-->
+            <!--th:text="#{paging.next}"></a>-->
+            <!--</li>-->
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
