@@ -15,7 +15,7 @@ public class Feedback {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "prod_id")
+    @Column(name = "prod_id", insertable = false, updatable = false)
     private Long prod_id;
 
     @Column(name = "feedback")
@@ -24,13 +24,23 @@ public class Feedback {
     @Column(name = "evaluation")
     private int evaluation;
 
-//    @ManyToOne
-//    @JoinColumn(name = "prod_id")
-//    private Product product;
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long user_id;
 
-    public Feedback(Long prod_id, String feedback, int evaluation) {
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "prod_id", referencedColumnName = "id")
+    private Product product;
+
+    public Feedback(Long user_id, Long prod_id, String feedback, int evaluation, Product product, User user) {
+        this.user_id = user_id;
         this.prod_id = prod_id;
         this.feedback = feedback;
         this.evaluation = evaluation;
+        this.product = product;
+        this.user = user;
     }
 }

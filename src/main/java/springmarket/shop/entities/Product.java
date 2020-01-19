@@ -31,13 +31,7 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-//    @OneToMany(mappedBy = "prod_id")
-//    private List<Feedback> feedbacks;
-
-    @OneToMany()
-    @JoinTable(name = "feedbacks",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "prod_id"))
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Feedback> feedbacks;
 
     @Override

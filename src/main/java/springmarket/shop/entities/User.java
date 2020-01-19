@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,7 +24,7 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Length(min = 3, max = 20, message = "меньше или больше требуемого значения")
+    @Length(min = 3, max = 255, message = "меньше или больше требуемого значения")
     @Column(name = "password")
     private String password;
 
@@ -36,11 +37,15 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "users_roles",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "user")
+    private List<Feedback> feedbacks;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 }
