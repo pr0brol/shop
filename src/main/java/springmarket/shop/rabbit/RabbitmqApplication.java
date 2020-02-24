@@ -11,20 +11,19 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class RabbitmqApplication {
-    static final String EXCHANGE_NAME = "exchange";
-
-    static final String QUEUE_NAME = "queue";
+    private static final String EXCHANGE_NAME_SERVER = "exchangeServer";
+    static final String EXCHANGE_NAME_SHOP = "exchangeShop";
+    private static final String QUEUE_NAME = "queueFromServer";
 
     @Bean
     Queue queueTopic() {
-        return new Queue(QUEUE_NAME, false);
+        return new Queue(QUEUE_NAME, true, false, true);
     }
 
     @Bean
-    FanoutExchange fanoutExchange() {
-        return new FanoutExchange(EXCHANGE_NAME);
+    FanoutExchange fanoutExchangeServer() {
+        return new FanoutExchange(EXCHANGE_NAME_SERVER);
     }
-
 
     @Bean
     Binding bindingFanout(Queue queue, FanoutExchange fanoutExchange) {
@@ -37,12 +36,13 @@ public class RabbitmqApplication {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(QUEUE_NAME);
         container.setMessageListener(listenerAdapter);
+        bindingFanout(queueTopic(), fanoutExchangeServer());
         return container;
     }
 
     @Bean
     MessageListenerAdapter listenerAdapterForTopic(Receiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessageFromTopic");
+        return new MessageListenerAdapter(receiver, "receiveMessageFromServer");
     }
 
 }
