@@ -37,6 +37,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "token")
+    private String token;
+
     @ManyToMany
     @JoinTable(name = "users_roles",
     joinColumns = @JoinColumn(name = "user_id"),
@@ -48,4 +51,5 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
 }
