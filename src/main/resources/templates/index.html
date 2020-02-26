@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Заготовка магазина</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Заготовка магазина</h1>
+
+    <h3>Фильтр</h3>
+    <form th:action="@{/}" method="GET">
+        <div class="input-group">
+            <input class="form-control" th:value="${param.min_price}" name="min_price" type="number"
+                   placeholder="Минимальная цена"/>
+            <input class="form-control" th:value="${param.max_price}" name="max_price" type="number"
+                   placeholder="Максимальная цена"/>
+            <select name="category">
+                <option th:text="'Не выбрано'" value="null"/>
+                <option th:each="c : ${categories}" th:text="${c.title}" th:selected="${param.category != null && c.id == param.category}"
+                        th:value="${c}"/>
+            </select>
+            <select name="sorties">
+                <option th:text="'Не выбрано'" th:value="null"/>
+                <option th:each="s : ${sorties}" th:text="${s}" th:selected="${s == param.sorties}" th:value="${s}"/>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-warning">Фильтровать</button>
+        <a class="btn btn-warning" th:href="@{'/?p=1'}">Сбросить фильтр</a>
+        <a class="btn btn-warning" th:href="@{'/cart'}">Корзина</a>
+    </form>
+    <br>
+    <h3>Каталог товаров</h3>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Описание товара</th>
+            <th>Цена</th>
+            <th>Категория</th>
+            <th>Редактирование</th>
+            <th>Корзина</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page<com.geekbrains.marketdemoa.entites.Item>"*/-->
+        <!--/*@thymesVar id="item" type="com.geekbrains.marketdemoa.entites.Item"*/-->
+        <tr th:each="product : ${page.content}">
+            <td th:text="${product.id}"/>
+            <td>
+                <span style="font-weight: bold" th:text="${product.title}"/>
+                <br>
+                <span th:text="${product.description}"/>
+            </td>
+            <td th:text="${product.price}"/>
+            <td th:text="${product.category.title}"/>
+            <td>
+                <a th:href="@{'/edit/' + ${product.id}}" class="btn btn-warning">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{'/?p=' + ${page.getNumber() + 1} + '&id=' + ${product.id}}" th:value="${product.id}" name="id" type="number" class="btn btn-warning">Add</a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!--<li class="page-item" th:classappend="${!(page.getNumber() > 0) ? 'disabled' : ''}">-->
+                <!--<a th:class="page-link" th:href="@{'/products?p=' + ${page.getNumber()} + ${filters}}"-->
+                   <!--th:text="#{paging.prev}"></a>-->
+            <!--</li>-->
+
+            <li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
+                th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
+                <a th:class="page-link" th:text="${i}" th:href="@{'/?p=' + ${i} + ${filtersDef}}"></a>
+            </li>
+
+            <!--<li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}">-->
+                <!--<a th:class="page-link" th:href="@{'/products?pageNumber=' + ${page.getNumber() + 2} + ${filters}}"-->
+                   <!--th:text="#{paging.next}"></a>-->
+            <!--</li>-->
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
