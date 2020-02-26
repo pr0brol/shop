@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Корзина</title>
+    <title th:text="#{order}"></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -13,19 +13,19 @@
 <body>
 
 <div class="container">
-    <div th:replace="~{navigation :: navigation(Cart)}" />
+    <div th:replace="~{navigation :: navigation(Cart)}"/>
     <br>
-    <h3>Корзина</h3>
-    <h5>В корзине наименований товаров: <span th:text = "${cart.items.size()}"></span></h5>
+    <h3 th:text="#{order.confirm}"/>
+
+    <h5 th:text="#{order.count} + ${cart.items.size()}"/>
     <!--<h5>В корзине товаров: <span th:text = "${count}"></span></h5>-->
     <table class="table table-hover">
         <thead class="thead-dark">
         <tr>
-            <th>Товар</th>
-            <th>Цена товара</th>
-            <th>Количество</th>
-            <th>Цена позиции</th>
-            <th>Действие</th>
+            <th th:text="#{order.product}"/>
+            <th th:text="#{order.product.price}"/>
+            <th th:text="#{order.quantity}"/>
+            <th th:text="#{order.products.price}"/>
         </tr>
         </thead>
         <tbody>
@@ -36,17 +36,17 @@
             <td th:text="${item.product.price}"/>
             <td th:text="${item.quantity}"/>
             <td th:text="${item.price}"/>
-            <td>
-                <a th:href="@{'/cart/delete/' + ${item.product.id}}" class="btn btn-warning">Delete</a>
-            </td>
         </tr>
         </tbody>
     </table>
-    <h5>В корзине товаров на сумму: <span th:text = "${cart.price}"></span></h5>
+    <h5 th:text="#{order.sum.price} + ${cart.price}"/>
     <br>
-    <div th:if="${cart.items.size() > 0}">
-        <a class="btn btn-primary" th:href="@{/orders/control}" >Подтвердить заказ</a>
-    </div>
+    <h4 th:text="#{order.info}"/>
+    <form th:action="@{/orders/create}" method="POST">
+        <input name="address" type="text" class="form-control" th:placeholder="#{order.address}">
+        <input name="phone_number" th:value="${user.phone}" type="text" class="form-control" th:placeholder="#{order.phone}">
+        <button class="btn btn-primary" type="submit" th:text="#{order.checkout}"></button>
+    </form>
 
     <nav aria-label="Page navigation">
         <ul class="pagination">
@@ -56,8 +56,8 @@
             <!--</li>-->
 
             <!--<li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"-->
-                <!--th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">-->
-                <!--<a th:class="page-link" th:text="${i}" th:href="@{'/?p=' + ${i} + ${filtersDef}}"></a>-->
+            <!--th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">-->
+            <!--<a th:class="page-link" th:text="${i}" th:href="@{'/?p=' + ${i} + ${filtersDef}}"></a>-->
             <!--</li>-->
 
             <!--<li class="page-item" th:classappend="${!(page.getNumber() < page.getTotalPages() - 1) ? 'disabled' : ''}">-->

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title th:text="#{registration}"/>
+    <link rel="stylesheet" th:href="@{../static/css/stylesheet.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div th:replace="~{navigation :: navigation(Profile)}" />
+
+    <h1 th:text="#{registration}"/>
+
+    <form th:action="@{/registration/create}" method="POST">
+        <input name="firstName" type="text" class="form-control" th:placeholder="#{registration.name}">
+        <input name="lastName" type="text" class="form-control" th:placeholder="#{registration.lastname}">
+        <input name="phone" type="text" class="form-control" th:placeholder="#{registration.phone}">
+        <input name="email" type="text" class="form-control" th:placeholder="#{registration.email}">
+        <input name="password_1" type="password" class="form-control" th:placeholder="#{registration.password}">
+        <input name="password_2" type="password" class="form-control" th:placeholder="#{registration.password.repeat}">
+        <button class="btn btn-primary" type="submit" th:text="#{registration}"></button>
+    </form>
+
+</div>
+
+</body>
+</html>
