@@ -31,7 +31,7 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product") //TODO попробовать убрать fetch cascade
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Feedback> feedbacks;
 
     @OneToMany(mappedBy = "product")

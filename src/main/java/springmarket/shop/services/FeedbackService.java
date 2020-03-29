@@ -29,7 +29,7 @@ public class FeedbackService {
     }
 
     public void deleteById(Long id) {
-        feedbackRepository.deleteById(id);  //TODO выполняется, но не работает
+        feedbackRepository.deleteById(id);
         return;
     }
 
