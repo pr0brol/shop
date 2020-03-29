@@ -17,7 +17,7 @@ public class ClientController {
     @GetMapping
     public String sendMessage(String string) {
         System.out.println("Sending message..." + string);
-        rabbitTemplate.convertAndSend(RabbitmqApplication.EXCHANGE_NAME,"", string);
+        rabbitTemplate.convertAndSend(RabbitmqApplication.EXCHANGE_NAME_SHOP,null, string);
         return "OK";
     }
 }

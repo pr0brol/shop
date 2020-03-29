@@ -1,11 +1,11 @@
 package springmarket.shop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -33,6 +33,10 @@ public class Product {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
     private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<ProductImage> images;
 
     @Override
     public int hashCode() {

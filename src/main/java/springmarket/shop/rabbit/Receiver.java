@@ -20,8 +20,9 @@ public class Receiver {
         this.orderController = orderController;
     }
 
-    public void receiveMessageFromTopic(String message) {
-        orderController.setStatus(message);
+    public void receiveMessageFromServer(byte[] message) {
+        String msg = new String(message);
+        orderController.setStatus(msg);
     }
 
 }

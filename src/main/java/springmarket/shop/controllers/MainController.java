@@ -21,7 +21,6 @@ public class MainController {
     private ProductService productService;
     private CategoryService categoryService;
     private UserService userService;
-    private OrderService orderService;
     private FeedbackService feedbackService;
 
     @GetMapping("/")
@@ -43,53 +42,14 @@ public class MainController {
     }
 
     @PostMapping("/")
-    public String pageAfterFeedback(Model model,
+    public String pageAfterFeedback(Model model, Principal principal,
                                     @RequestParam(name = "feedback", required = false) String feedback,
-                                    @RequestParam(name = "evaluation", required = false) String evaluation){
-        Feedback feedBack = new Feedback(1L, feedback, Integer.parseInt(evaluation));
-        feedbackService.save(feedBack);
-        return "redirect:/";
-    }
-
-    @GetMapping("/login")
-    public String loginPage(){
-        return "login_page";
-    }
-
-    @GetMapping("/profile")
-    public String profilePage(Model model, Principal principal){
-        if(principal == null){
-            return "redirect:/";
-        }
+                                    @RequestParam(name = "evaluation", required = false) String evaluation,
+                                    @RequestParam(name = "id") String id){
+        Long ID = Long.parseLong(id);
         User user = userService.findByPhone(principal.getName());
-        List<Order> orders = orderService.findOrdersByUser(user);
-        model.addAttribute("user", user);
-        model.addAttribute("orders", orders);
-        return "profile";
-    }
-
-    @PostMapping("/registration/create")
-    public String createUser(Model model,
-                             @ModelAttribute(name = "user") User user,
-                             @RequestParam(name = "password_1", required = false) String pass1,             // не будет исключения если не введён пароль
-                             @RequestParam(name = "password_2", required = false) String pass2){
-        if(pass1.equals(pass2)){
-            user.setPassword(pass1);
-            boolean result = userService.addUser(user);
-            if(result){
-                model.addAttribute(user);
-                return "registration_success";
-            }
-            else {
-                return "redirect:/registration";  //заменить на страницу с ошибкой регистрации
-            }
-        }
-        return "redirect:/registration";
-    }
-
-    @GetMapping("/registration")
-    public String addUser(){
-        return "registration";
+        feedbackService.save(new Feedback(user.getId(), ID, feedback, Integer.parseInt(evaluation), productService.findById(ID), user));
+        return "redirect:/";
     }
 
 }

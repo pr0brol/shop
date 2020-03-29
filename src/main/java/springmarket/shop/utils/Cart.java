@@ -1,41 +1,62 @@
 package springmarket.shop.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import springmarket.shop.entities.OrderItem;
 import springmarket.shop.entities.Product;
-import springmarket.shop.services.ProductService;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Data
 public class Cart {
-    private ProductService productService;
-    private Map<Product, Integer> cartProducts;
+    private List<OrderItem> items;
+    private BigDecimal price;
 
-    @Autowired
-    public void setProductService(ProductService productService) {
-        this.productService = productService;
-        cartProducts = new HashMap<>();
+    @PostConstruct
+    public void init() {
+        items = new ArrayList<>();
     }
 
-    public void add(Long id){
-        Product product = productService.findById(id);
-        System.out.println(cartProducts.containsKey(product));
-        System.out.println(cartProducts);
-        if(cartProducts.containsKey(product)){
-            cartProducts.put(product, cartProducts.get(product) + 1);
-        }else {
-            cartProducts.put(product, 1);
+    public void clear() {
+        items.clear();
+        recalculate();
+    }
+
+    public void add(Product product) {
+        for (OrderItem i : items) {
+            if (i.getProduct().getId().equals(product.getId())) {
+                i.setQuantity(i.getQuantity() + 1);
+                i.setPrice(new BigDecimal(i.getQuantity() * i.getProduct().getPrice().doubleValue()));
+                recalculate();
+                return;
+            }
+        }
+        items.add(new OrderItem(product));
+        recalculate();
+    }
+
+    public void removeById(Long productId) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getProduct().getId().equals(productId)) {
+                items.remove(i);
+                recalculate();
+                return;
+            }
         }
     }
 
-    public Map<Product, Integer> allProductsInCart(){
-        return cartProducts;
+    public void recalculate() {
+        price = new BigDecimal(0.0);
+        for (OrderItem i : items) {
+            price = price.add(i.getPrice());
+        }
     }
-
 }
