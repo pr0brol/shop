@@ -1,11 +1,11 @@
 package springmarket.shop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -31,8 +31,12 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "product") //TODO попробовать убрать fetch cascade
     private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<ProductImage> images;
 
     @Override
     public int hashCode() {

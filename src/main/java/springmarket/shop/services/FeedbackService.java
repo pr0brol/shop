@@ -1,15 +1,9 @@
 package springmarket.shop.services;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import springmarket.shop.entities.Feedback;
-import springmarket.shop.entities.Product;
 import springmarket.shop.repositories.FeedbackRepository;
-import springmarket.shop.repositories.ProductRepository;
 
 import java.util.List;
 
@@ -18,10 +12,9 @@ public class FeedbackService {
     private FeedbackRepository feedbackRepository;
 
     @Autowired
-    public void setProductRepository(FeedbackRepository feedbackRepository) {
+    public void setFeedbackRepository(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
-
 
     public List<Feedback> findAll(){
         return feedbackRepository.findAll();
@@ -35,4 +28,12 @@ public class FeedbackService {
         return feedbackRepository.save(feedback);
     }
 
+    public void deleteById(Long id) {
+        feedbackRepository.deleteById(id);  //TODO выполняется, но не работает
+        return;
+    }
+
+    public Long findFeedbackByProductId(Long id) {
+        return feedbackRepository.findId(id);
+    }
 }

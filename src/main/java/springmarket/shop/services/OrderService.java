@@ -19,11 +19,13 @@ public class OrderService {
     }
 
     public Order findById(Long id) {
-        return orderRepository.findId(id);
+        return orderRepository.findOrderById(id);
     }
 
-    public void updateOrder(Order order) {
-        orderRepository.update(order.getId(), order.getStatus());
+    public void updateOrder(Long id, String status) {
+        orderRepository.update(id, status);
     }
+
+    public void delete(Long id) {orderRepository.deleteById(id);}
 
 }
